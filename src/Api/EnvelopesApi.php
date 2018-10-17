@@ -8125,6 +8125,121 @@ class EnvelopesApi
 
             throw $e;
         }
+    }/**
+     * Operation listDocumentTabs
+     *
+     * Gets the tabs information for a signer or sign-in-person recipient in an envelope.
+     *
+    * @param string $account_id The external account number (int) or account ID Guid.
+    * @param string $envelope_id The envelopeId Guid of the envelope being accessed.
+    * @param string $document_id The ID of the document being accessed.
+     * @throws \DocuSign\eSign\ApiException on non-2xx response
+     * @return \DocuSign\eSign\Model\Tabs
+     */
+    public function listDocumentTabs($account_id, $envelope_id, $document_id)
+    {
+        list($response) = $this->listDocumentTabsWithHttpInfo($account_id, $envelope_id, $document_id, $options);
+        return $response;
+    }
+
+    /**
+     * Operation listDocumentTabsWithHttpInfo
+     *
+     * Gets the tabs information for a signer or sign-in-person recipient in an envelope.
+     *
+    * @param string $account_id The external account number (int) or account ID Guid.
+    * @param string $envelope_id The envelopeId Guid of the envelope being accessed.
+    * @param string $document_id The ID of the document being accessed.
+     * @throws \DocuSign\eSign\ApiException on non-2xx response
+     * @return array of \DocuSign\eSign\Model\Tabs, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function listDocumentTabsWithHttpInfo($account_id, $envelope_id, $document_id)
+    {
+        // verify the required parameter 'account_id' is set
+        if ($account_id === null) {
+            throw new \InvalidArgumentException('Missing the required parameter $account_id when calling listDocumentTabs');
+        }
+        // verify the required parameter 'envelope_id' is set
+        if ($envelope_id === null) {
+            throw new \InvalidArgumentException('Missing the required parameter $envelope_id when calling listDocumentTabs');
+        }
+        // verify the required parameter 'recipient_id' is set
+        if ($document_id === null) {
+            throw new \InvalidArgumentException('Missing the required parameter $document_id when calling listDocumentTabs');
+        }
+        // parse inputs
+        $resourcePath = "/v2/accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/tabs";
+        $httpBody = '';
+        $queryParams = [];
+        $headerParams = [];
+        $formParams = [];
+        $_header_accept = $this->apiClient->selectHeaderAccept(['application/json']);
+        if (!is_null($_header_accept)) {
+            $headerParams['Accept'] = $_header_accept;
+        }
+        $headerParams['Content-Type'] = $this->apiClient->selectHeaderContentType([]);
+
+        // path params
+        if ($account_id !== null) {
+            $resourcePath = str_replace(
+                "{" . "accountId" . "}",
+                $this->apiClient->getSerializer()->toPathValue($account_id),
+                $resourcePath
+            );
+        }
+        // path params
+        if ($envelope_id !== null) {
+            $resourcePath = str_replace(
+                "{" . "envelopeId" . "}",
+                $this->apiClient->getSerializer()->toPathValue($envelope_id),
+                $resourcePath
+            );
+        }
+        // path params
+        if ($document_id !== null) {
+            $resourcePath = str_replace(
+                "{" . "documentId" . "}",
+                $this->apiClient->getSerializer()->toPathValue($document_id),
+                $resourcePath
+            );
+        }
+        // default format to json
+        $resourcePath = str_replace("{format}", "json", $resourcePath);
+
+        
+        // for model (json/xml)
+        if (isset($_tempBody)) {
+            $httpBody = $_tempBody; // $_tempBody is the method argument, if present
+        } elseif (count($formParams) > 0) {
+            $httpBody = $formParams; // for HTTP post (form)
+        }
+        // make the API Call
+        try {
+            list($response, $statusCode, $httpHeader) = $this->apiClient->callApi(
+                $resourcePath,
+                'GET',
+                $queryParams,
+                $httpBody,
+                $headerParams,
+                '\DocuSign\eSign\Model\Tabs',
+                '/v2/accounts/{accountId}/envelopes/{envelopeId}/documents/{documentId}/tabs'
+            );
+
+            return [$this->apiClient->getSerializer()->deserialize($response, '\DocuSign\eSign\Model\Tabs', $httpHeader), $statusCode, $httpHeader];
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\DocuSign\eSign\Model\Tabs', $e->getResponseHeaders());
+                    $e->setResponseObject($data);
+                    break;
+                case 400:
+                    $data = $this->apiClient->getSerializer()->deserialize($e->getResponseBody(), '\DocuSign\eSign\Model\ErrorDetails', $e->getResponseHeaders());
+                    $e->setResponseObject($data);
+                    break;
+            }
+
+            throw $e;
+        }
     }
 
     /**
